@@ -13,7 +13,7 @@ I decided to parameterize a type of surfboard shape in 3D. I chose to start with
 Here I define a surfboard 9' long, 3" thick and 2.5" wide. I define a 20' longitudinal curvature and a -3' transverse curvature. It is 10% oblong.
 
 ```python
-surfboard = Surfboard()
+surfboard = SurfBoard()
 
 surfboard.triangulate(export=True)
 surfboard.show()
