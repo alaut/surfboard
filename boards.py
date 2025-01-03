@@ -10,15 +10,15 @@ from stl import mesh
 class SurfBoard:
     """defines standard surfboard parametric shape"""
 
-    units = 'ft'
+    units: str = 'ft'
 
-    w: float = 2.5
-    h: float = 1/4
-    l: float = 9
+    w: float = 2
+    h: float = 1/5
+    l: float = 8
 
-    k: float = 0.1
-    fz: float = 20
-    fx: float = -3
+    k: float = 1/2
+    Rz: float = 60
+    Rx: float = -10
 
     name = 'Board'
     nu = 29
@@ -38,10 +38,10 @@ class SurfBoard:
         z = self.l/2*np.cos(u)
 
         # apply ovoid (https://www.mathematische-basteleien.de/eggcurves.htm)
-        x = x*np.sqrt(1 + self.k*z)
+        x = x*np.sqrt(1 + 2*self.k*z/self.l)
 
         # apply parabolic deformation
-        y = y + z**2/(4*self.fz) + x**2/(4*self.fx)
+        y = y + z**2/(2*self.Rz) + x**2/(2*self.Rx)
 
         # store grid
         self.r = np.stack([x, y, z])
@@ -59,7 +59,7 @@ class SurfBoard:
             ax.set_aspect('equal')
             ax.set_title(self)
 
-            fig.savefig(f"./figs/{self.name}.{i}-{j}.svg")
+            fig.savefig(f"{self.name}.{i}-{j}.svg")
 
     def triangulate(self, export=False):
 
@@ -94,6 +94,7 @@ class SurfBoard:
 if __name__ == "__main__":
 
     surfboard = SurfBoard()
+    # surfboard.name = '../surfmeta-docs/figs/Board'
 
     surfboard.triangulate(export=True)
     surfboard.show()
