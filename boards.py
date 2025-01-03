@@ -59,7 +59,7 @@ class SurfBoard:
             ax.set_aspect('equal')
             ax.set_title(self)
 
-            fig.savefig(f"{self.name}.{i}-{j}.svg")
+            fig.savefig(f"./figs/{self.name}.{i}-{j}.svg")
 
     def triangulate(self, export=False):
 
