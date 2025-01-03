@@ -21,14 +21,12 @@ surfboard.show()
 plt.show()
 ```
 
-The python object generates the following view.
+The python object generates the following views.
 
 | View  |        Projection         |
 | :---: | :-----------------------: |
 | Front | ![Front](./Board.0-1.svg) |
 |  Top  |  ![Top](./Board.2-0.svg)  |
 | Right | ![Right](./Board.2-1.svg) |
+|  STL  |  ![Stl](./Board.stl.png)  |
 
-As well, a "printable" 3D STL is generated.
-
-![](./Board.stl.png)
