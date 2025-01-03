@@ -6,10 +6,6 @@ import numpy as np
 from stl import mesh
 
 
-def cosd(t): return np.cos(np.deg2rad(t))
-def sind(t): return np.sin(np.deg2rad(t))
-
-
 @dataclass
 class Surfboard:
     """defines standard surfboard parametric shape"""
