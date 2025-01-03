@@ -7,10 +7,8 @@ from stl import mesh
 
 
 @dataclass
-class Surfboard:
+class SurfBoard:
     """defines standard surfboard parametric shape"""
-
-    name: str = 'Board'
 
     units = 'ft'
 
@@ -22,12 +20,16 @@ class Surfboard:
     fz: float = 20
     fx: float = -3
 
-    def __post_init__(self, nu=29, nv=31):
+    name = 'Board'
+    nu = 29
+    nv = 31
+
+    def __post_init__(self):
 
         # parameterize
         u, v = np.meshgrid(
-            np.linspace(np.pi, 0, nu),
-            np.linspace(-np.pi, np.pi, nv)
+            np.linspace(np.pi, 0, self.nu),
+            np.linspace(-np.pi, np.pi, self.nv)
         )
 
         # define ellipsoid
@@ -91,7 +93,7 @@ class Surfboard:
 
 if __name__ == "__main__":
 
-    surfboard = Surfboard()
+    surfboard = SurfBoard()
 
     surfboard.triangulate(export=True)
     surfboard.show()
