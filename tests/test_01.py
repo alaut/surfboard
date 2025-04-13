@@ -1,3 +1,5 @@
+# useful to test/play with implicit functions
+
 import matplotlib.pyplot as plt
 
 import numpy as np
