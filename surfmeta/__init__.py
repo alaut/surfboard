@@ -190,3 +190,22 @@ def dxfwrite(contours, filename, s=1):
     doc.saveas(filename)
 
     print(f"saved {filename}")
+
+
+def tile(slices, rows=8, col_spacing=22.25, row_spacing=3):
+    """take list of contours and tile to a grid and export as a single dxf"""
+
+    N = len(slices)
+
+    cols = (N + rows - 1) // rows
+
+    print(f'tiling {rows} rows x {cols} collums')
+
+    all_slices = []
+
+    for i, lines in enumerate(slices):
+        for line in lines:
+            all_slices.append(
+                line + np.stack([col_spacing*(i % cols), row_spacing*(i // cols)]))
+
+    return all_slices
