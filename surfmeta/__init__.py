@@ -205,7 +205,7 @@ def tile(slices, rows=8, col_spacing=22.25, row_spacing=3):
 
     for i, lines in enumerate(slices):
         for line in lines:
-            all_slices.append(
-                line + np.stack([col_spacing*(i % cols), row_spacing*(i // cols)]))
+            offset = [col_spacing*(i % cols), row_spacing*(i // cols)]
+            all_slices.append(line + np.stack(offset))
 
     return all_slices
