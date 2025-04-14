@@ -22,9 +22,9 @@ class Board:
     tw: float = 1
 
     # rockers
-    rz1: float = -20*12
-    rz2: float = -37*12
-    rx: float = 4*12
+    rz1: float = 0
+    rz2: float = 0
+    rx0: float = 0
 
     # squareness
     n: float = 2
@@ -49,11 +49,15 @@ class Board:
 
     # oversize factors
     sx: float = 1.25
-    sy: float = 3
+    sy: float = 1.25
     sz: float = 1.25
+
+    comments: str = None
 
     def __post_init__(self):
         os.makedirs(os.path.dirname(self.name), exist_ok=True)
+        if self.comments:
+            print(self.comments)
 
     def sdf(self, x, y, z):
         """return signed distance field
@@ -62,8 +66,9 @@ class Board:
             https://www.ntop.com/resources/blog/understanding-the-basics-of-b-reps-and-implicits/"""
 
         # apply parabolic deformation
-        y = y + (z > 0) * z**2/(2*self.rz1) +\
-            (z <= 0)*z**2 / (2*self.rz2) + x**2/(2*self.rx)
+        y = 0.5*self.rz1*z**2*(z > 0) + \
+            0.5*self.rz2*z**2*(z <= 0) + \
+            0.5*self.rx0*x**2 + y
 
         # apply ovoid deformation
         x = x*np.sqrt(1 + self.k*z/self.lz)
@@ -96,12 +101,13 @@ class Board:
         Fc = np.min(np.stack(Fc), axis=0)
 
         # chop back of board
-        Fb1 = -(z - (-self.lz/2 + self.tail_cut))
-        Fb2 = -(z - (-self.lz/2 + self.tail_cut + self.tw/2))
+        if self.tail_cut > 0:
+            Fb1 = -(z - (-self.lz/2 + self.tail_cut))
+            Fb2 = -(z - (-self.lz/2 + self.tail_cut + self.tw/2))
 
-        # cut tail
-        Fo = np.maximum(Fo, Fb1)
-        Fi = np.maximum(Fi, Fb2)
+            # cut tail
+            Fo = np.maximum(Fo, Fb1)
+            Fi = np.maximum(Fi, Fb2)
 
         # put it all together
         F = Fo*np.maximum(Fi, Fs*Fc)
@@ -139,7 +145,7 @@ class Board:
         F = self.sdf(**points)
         lines = contour_generator(U, V, F).lines(0)
 
-        return lines
+        return lines, [U, V, F]
 
     def generate_mesh(self, nx=100, ny=100, nz=100):
         """generate mesh of given geometry"""
