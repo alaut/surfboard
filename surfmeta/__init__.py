@@ -177,8 +177,16 @@ def sign(x):
     return np.where(x == 0, 1, np.sign(x))
 
 
-def dxfwrite(contours, filename, s=1):
+def dxfwrite(contours, filename, s=1, show=False):
     """export contours as dxf file"""
+
+    if show:
+        fig, ax = plt.subplots()
+        for line in contours:
+            ax.plot(*line.T*s)
+        ax.set_title(filename)
+        ax.set_aspect('equal')
+        plt.show()
 
     doc = ezdxf.new()
     msp = doc.modelspace()
@@ -198,7 +206,7 @@ def tile(slices, rows=8, col_spacing=22.25, row_spacing=3):
 
     cols = (N + rows - 1) // rows
 
-    print(f'tiling {rows} rows x {cols} columns')
+    print(f'tiling {N} slices into {rows} rows x {cols} columns')
 
     all_slices = []
 
