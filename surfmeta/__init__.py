@@ -141,7 +141,7 @@ class Board:
 
         return lines
 
-    def mesh(self, nx=100, ny=100, nz=100):
+    def generate_mesh(self, nx=100, ny=100, nz=100):
         """generate mesh of given geometry"""
 
         xq = self.sx*self.lx*np.linspace(-1/2, 1/2, nx)
