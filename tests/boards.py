@@ -7,7 +7,7 @@ from surfmeta.templates import shorty, longboard
 boards = [shorty, longboard]
 
 
-def main(brd, sx=0.6, sy=2, sz=0.6, d=0.25 * inch):
+def main(brd, sx=0.6, sy=2, sz=0.6, d=0.5 * inch):
 
     # construct coarse volume to get board shape
     vol = pv.RectilinearGrid(
@@ -21,30 +21,31 @@ def main(brd, sx=0.6, sy=2, sz=0.6, d=0.25 * inch):
 
     # re-build volume with efficient bounds
     vol = pv.RectilinearGrid(
-        np.linspace(poly.bounds.x_min, poly.bounds.x_max, 50),
-        np.linspace(poly.bounds.y_min, poly.bounds.y_max, 50),
-        np.linspace(poly.bounds.z_min, poly.bounds.z_max, 150),
+        np.linspace(poly.bounds.x_min, poly.bounds.x_max, 30),
+        np.linspace(poly.bounds.y_min, poly.bounds.y_max, 30),
+        np.linspace(poly.bounds.z_min, poly.bounds.z_max, 100),
     ).scale(1.05)
 
     # get upscaled outline
     poly = brd.apply(vol).contour([0])
 
     # slice through board
-    z = np.arange(poly.bounds.z_min - d, poly.bounds.z_max + d, d)
     x = np.linspace(poly.bounds.x_min - d, poly.bounds.x_max + d, 300)
     y = np.linspace(poly.bounds.y_min - d, poly.bounds.y_max + d, 300)
+    z = np.arange(poly.bounds.z_min - d, poly.bounds.z_max + d, d)
 
-    slices = pv.MultiBlock()
-    for zq in z:
-        grid = pv.RectilinearGrid(x, y, [zq])
-        slice = brd.apply(grid).contour([0])
-        slices.append(slice)
+    # setup grid slices
+    grids = [pv.RectilinearGrid(x, y, [zq]) for zq in z]
+
+    # slice board
+    slices = pv.MultiBlock([brd.apply(grid).contour([0]) for grid in grids])
 
     # plot results
     plotter = pv.Plotter()
     # plotter.add_mesh(poly, opacity=0.2)
     # plotter.add_mesh(vol.outline())
     plotter.add_mesh(slices, show_scalar_bar=False, color="black")
+    plotter.enable_parallel_projection()
 
     plotter.show()
 

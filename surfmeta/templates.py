@@ -1,5 +1,7 @@
-from . import Board
 from scipy.constants import inch, foot
+
+
+from . import Board
 
 shorty = Board(
     width=19.5 * inch,
