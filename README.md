@@ -12,3 +12,5 @@ This package can be used to define a surfboard's volume implicitly, visualize an
 To show the scope of the lasercutting to be required...
 
 ![alt text](image.png)
+
+Earlier parametric-surface version: [legacy](legacy/)
