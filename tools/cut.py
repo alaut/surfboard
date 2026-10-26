@@ -23,14 +23,14 @@ def span(part, u):
 def section(board: Board, z, n=400):
     """rib outline at z, in (x, y)"""
     x, y, _ = axes(board, n)
-    F = field(board, pv.RectilinearGrid(x, y, [z]))["F"].reshape(n, n)
+    F = field(board, pv.RectilinearGrid(x, y, [z]))["F"].reshape(len(y), n)
     return polygon(contour_generator(x, y, F).lines(0))
 
 
 def profile(board: Board, n=400):
     """stringer outline at x = 0, in (z, y)"""
     _, y, z = axes(board, n)
-    F = field(board, pv.RectilinearGrid([0.0], y, z))["F"].reshape(len(z), n).T
+    F = field(board, pv.RectilinearGrid([0.0], y, z))["F"].reshape(len(z), len(y)).T
     return polygon(contour_generator(z, y, F).lines(0))
 
 

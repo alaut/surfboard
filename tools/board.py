@@ -22,12 +22,12 @@ class Board:
 
 
 def axes(board: Board, n=400):
-    """sample axes x, y, z enclosing the board; y spans twice the rocker sagitta L²/8R"""
-    s = board.height + abs(board.side_rocker) * board.width**2
-    s += max(abs(board.head_rocker), abs(board.tail_rocker)) * board.length**2 / 4
+    """sample axes x, y, z enclosing the board; y covers 1.2 × (half height + rail droop + rocker sagitta L²/8R)"""
+    s = board.height / 2 + abs(board.side_rocker) * board.width**2 / 6
+    s += max(abs(board.head_rocker), abs(board.tail_rocker)) * board.length**2 / 8
     return (
         np.linspace(-board.width, board.width, n),
-        np.linspace(-s, s, n),
+        np.linspace(-1.2 * s, 1.2 * s, 2 * n),
         np.linspace(-0.55 * board.length, 0.55 * board.length, 4 * n),
     )
 

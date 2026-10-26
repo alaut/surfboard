@@ -26,7 +26,8 @@ def preview(board: Board, n=50):
 
     def update(name, value):
         setattr(board, name, value)
-        plotter.add_mesh(field(board, grid).contour([0], scalars="F"), name="board")
+        surface = field(board, grid).contour([0], scalars="F", compute_scalars=False, compute_normals=True)
+        plotter.add_mesh(surface, name="board")
 
     for i, (name, rng) in enumerate(RANGES.items()):
         v = 0.95 - 0.09 * i
@@ -41,6 +42,14 @@ def preview(board: Board, n=50):
         )
     plotter.show()
     print(board)
+
+
+def export(board: Board, filename, n=100):
+    """write the board surface as a standalone interactive vtk.js page (touch works on mobile)"""
+    plotter = pv.Plotter()
+    grid = field(board, pv.RectilinearGrid(*axes(board, n)))
+    plotter.add_mesh(grid.contour([0], scalars="F", compute_scalars=False, compute_normals=True))
+    plotter.export_html(filename)
 
 
 def embed(part, z=None):

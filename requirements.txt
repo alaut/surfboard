@@ -4,3 +4,5 @@ pyvista
 shapely
 contourpy
 ezdxf
+trame-pyvista
+nest_asyncio2
